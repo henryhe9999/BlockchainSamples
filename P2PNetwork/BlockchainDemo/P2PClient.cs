@@ -24,7 +24,7 @@ namespace BlockchainDemo
                     else
                     {
                         Blockchain newChain = JsonConvert.DeserializeObject<Blockchain>(e.Data);
-                        if (newChain.Chain.Count > Program.PhillyCoin.Chain.Count)
+                        if (newChain.IsValid() && newChain.Chain.Count > Program.PhillyCoin.Chain.Count)
                         {
                             List<Transaction> newTransactions = new List<Transaction>();
                             newTransactions.AddRange(newChain.PendingTransactions);
