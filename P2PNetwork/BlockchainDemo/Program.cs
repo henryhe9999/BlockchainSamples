@@ -30,28 +30,27 @@ namespace BlockchainDemo
                 Console.WriteLine($"Current user is {name}");
             }
 
-            Console.WriteLine("=========================");
-            Console.WriteLine("1. Connect to a server");
-            Console.WriteLine("2. Add a transaction");
-            Console.WriteLine("3. Display Blockchain");
-            Console.WriteLine("4. Exit");
-            Console.WriteLine("=========================");
-
             int selection = 0;
             while (selection != 4)
             {
                 switch (selection)
                 {
                     case 1:
-                        Console.WriteLine("Please enter the server URL");
+                        Console.WriteLine("Please enter the server URL (enter 0 to cancel the operation)");
                         string serverURL = Console.ReadLine();
+                        if (serverURL == "0")
+                            break;
                         Client.Connect($"{serverURL}/Blockchain");
                         break;
                     case 2:
-                        Console.WriteLine("Please enter the receiver name");
+                        Console.WriteLine("Please enter the receiver name (enter 0 to cancel the operation)");
                         string receiverName = Console.ReadLine();
-                        Console.WriteLine("Please enter the amount");
+                        if (receiverName == "0")
+                            break;
+                        Console.WriteLine("Please enter the amount (enter 0 to cancel the operation)");
                         string amount = Console.ReadLine();
+                        if (amount == "0")
+                            break;
                         PhillyCoin.CreateTransaction(new Transaction(name, receiverName, int.Parse(amount)));
                         PhillyCoin.ProcessPendingTransactions(name);
                         Client.Broadcast(JsonConvert.SerializeObject(PhillyCoin));
@@ -63,39 +62,28 @@ namespace BlockchainDemo
 
                 }
 
+                Console.WriteLine("=========================");
+                Console.WriteLine("1. Connect to a server");
+                Console.WriteLine("2. Add a transaction");
+                Console.WriteLine("3. Display Blockchain");
+                Console.WriteLine("4. Exit");
+                Console.WriteLine("=========================");
                 Console.WriteLine("Please select an action");
                 string action = Console.ReadLine();
                 selection = int.Parse(action);
             }
 
-            Client.Close();
-
-            /*
-            var startTime = DateTime.Now;
-
-            Blockchain phillyCoin = new Blockchain();
-            phillyCoin.CreateTransaction(new Transaction("Henry", "MaHesh", 10));
-            phillyCoin.ProcessPendingTransactions("Bill");
-
-            phillyCoin.CreateTransaction(new Transaction("MaHesh", "Henry", 5));
-            phillyCoin.CreateTransaction(new Transaction("MaHesh", "Henry", 5));
-            phillyCoin.ProcessPendingTransactions("Bill");
-
-            var endTime = DateTime.Now;
-
-            Console.WriteLine($"Duration: {endTime - startTime}");
-
-            Console.WriteLine("=========================");
-            Console.WriteLine($"Henry' balance: {phillyCoin.GetBalance("Henry")}");
-            Console.WriteLine($"MaHesh' balance: {phillyCoin.GetBalance("MaHesh")}");
-            Console.WriteLine($"Bill' balance: {phillyCoin.GetBalance("Bill")}");
-
-            Console.WriteLine("=========================");
-            Console.WriteLine($"phillyCoin");
-            Console.WriteLine(JsonConvert.SerializeObject(phillyCoin, Formatting.Indented));
-
-             Console.ReadKey();
-            */
+            if (Client != null)
+            {
+                try
+                {
+                    Client.Close();
+                }
+                finally
+                {
+                    Client = null;
+                }
+            }
         }
     }
 }

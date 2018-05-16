@@ -22,10 +22,10 @@ namespace BlockchainDemo
 
         protected override void OnMessage(MessageEventArgs e)
         {
-            if (e.Data == "Hi Server")
+            if (e.Data.Contains("Hi Server"))
             {
                 Console.WriteLine(e.Data);
-                Send("Hi Client");
+                Send($"From {Program.Port}: Hi Client");
             }
             else
             {
