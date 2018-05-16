@@ -17,7 +17,7 @@ namespace BlockchainDemo
                 WebSocket ws = new WebSocket(url);
                 ws.OnMessage += (sender, e) => 
                 {
-                    if (e.Data == "Hi Client")
+                    if (e.Data.Contains("Hi Client"))
                     {
                         Console.WriteLine(e.Data);
                     }
@@ -36,7 +36,7 @@ namespace BlockchainDemo
                     }
                 };
                 ws.Connect();
-                ws.Send("Hi Server");
+                ws.Send($"From {Program.Port}: Hi Server");
                 ws.Send(JsonConvert.SerializeObject(Program.PhillyCoin));
                 wsDict.Add(url, ws);
             }
